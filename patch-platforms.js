@@ -1,4 +1,9 @@
 module.exports = function ($logger, $projectData, $usbLiveSyncService, $platformsData, hookArgs) {
+    var appFilesUpdaterOptions = (hookArgs && hookArgs.appFilesUpdaterOptions) || {};
+    if (appFilesUpdaterOptions.bundle) {
+        return;
+    }
+
     var path = require("path");
     var platformName = hookArgs.platform.toLowerCase();
     
