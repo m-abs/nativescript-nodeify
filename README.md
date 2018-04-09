@@ -41,6 +41,36 @@ Include this in your code before requiring the problematic npm module.
 require("nativescript-nodeify");
 ```
 
+### With webpack
+
+You need to make a few minor changes to `webpack.config.js`.
+Start by importing the helpers.
+```js
+const nodeify = require('nativescript-nodeify/webpack');
+```
+
+Then find `resolve` on the config-object and make these few adjustments:
+```js
+    resolve: {
+      extensions: ['.ts', '.js', '.scss', '.css'],
+      // Resolve {N} system modules from tns-core-modules
+      modules: [
+        'node_modules/tns-core-modules',
+        'node_modules',
+      ],
+      /* Remove old alias-key
+      alias: {
+        '~': resolve('./app')
+      },
+      */
+      alias: nodeify.geAlias(esolve('./app')), // <-- Add this line
+      aliasFields: nodeify.aliasFields, // <-- And this line
+
+      // don't resolve symlinks to symlinked modules
+      // symlinks: false
+    },
+```
+
 ## Demo app
 [The demo](https://github.com/EddyVerbruggen/nativescript-nodeify) tests a few popular
 libraries that depend on Node built-in modules which would normally not work in a NativeScript runtime environment.
